@@ -50,6 +50,8 @@ from .wavespeed import (
 )
 from .zai_org import ZaiConversationalTask
 
+from .polargrid import PolarGridFeatureExtraction, PolarGridTextGeneration 
+
 
 logger = logging.get_logger(__name__)
 
@@ -69,6 +71,7 @@ PROVIDER_T = Literal[
     "novita",
     "nscale",
     "openai",
+    "polargrid",
     "publicai",
     "replicate",
     "sambanova",
@@ -163,6 +166,10 @@ PROVIDERS: dict[PROVIDER_T, dict[str, TaskProviderHelper]] = {
     },
     "openai": {
         "conversational": OpenAIConversationalTask(),
+    },
+    "polargrid": {
+        "feature-extraction": PolarGridFeatureExtraction(),
+        "text-generation": PolarGridTextGeneration(),
     },
     "publicai": {
         "conversational": PublicAIConversationalTask(),
