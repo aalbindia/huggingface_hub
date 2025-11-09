@@ -37,6 +37,7 @@ from .nebius import (
 from .novita import NovitaConversationalTask, NovitaTextGenerationTask, NovitaTextToVideoTask
 from .nscale import NscaleConversationalTask, NscaleTextToImageTask
 from .openai import OpenAIConversationalTask
+from .polargird import PolarGridFeatureExtraction, PolarGridTextGeneration
 from .publicai import PublicAIConversationalTask
 from .replicate import ReplicateImageToImageTask, ReplicateTask, ReplicateTextToImageTask, ReplicateTextToSpeechTask
 from .sambanova import SambanovaConversationalTask, SambanovaFeatureExtractionTask
@@ -69,6 +70,7 @@ PROVIDER_T = Literal[
     "novita",
     "nscale",
     "openai",
+    "polargid",
     "publicai",
     "replicate",
     "sambanova",
@@ -163,6 +165,10 @@ PROVIDERS: dict[PROVIDER_T, dict[str, TaskProviderHelper]] = {
     },
     "openai": {
         "conversational": OpenAIConversationalTask(),
+    },
+    "polargrid": {
+        "feature-extraction": PolarGridFeatureExtraction(),
+        "text-generation": PolarGridTextGeneration(),
     },
     "publicai": {
         "conversational": PublicAIConversationalTask(),
