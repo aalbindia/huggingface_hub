@@ -45,7 +45,7 @@ from huggingface_hub.inference._providers.nebius import NebiusFeatureExtractionT
 from huggingface_hub.inference._providers.novita import NovitaConversationalTask, NovitaTextGenerationTask
 from huggingface_hub.inference._providers.nscale import NscaleConversationalTask, NscaleTextToImageTask
 from huggingface_hub.inference._providers.openai import OpenAIConversationalTask
-from huggingface_hub.inference._providers.polargrid import PolarGridFeatureExtraction, PolarGridTextGeneration
+from huggingface_hub.inference._providers.polargrid import PolarGridFeatureExtractionTask, PolarGridTextGenerationTask, PolarGridConversationalTask
 from huggingface_hub.inference._providers.publicai import PublicAIConversationalTask
 from huggingface_hub.inference._providers.replicate import (
     ReplicateImageToImageTask,
@@ -1253,11 +1253,11 @@ class TestPolarGridProvider:
         assert helper.get_response(response) == "Hello back!"
         
     def test_prepare_route_feature_extraction(self):
-        helper = PolarGridFeatureExtraction()
+        helper = PolarGridFeatureExtractionTask()
         assert helper._prepare_route("username/repo_name", "hf_token") == "/v1/embeddings"
 
     def test_prepare_payload_as_dict_feature_extraction(self):
-        helper = PolarGridFeatureExtraction()
+        helper = PolarGridFeatureExtractionTask()
         payload = helper._prepare_payload_as_dict(
             "Hello world",
             {"some-parameter": True},
@@ -1270,16 +1270,16 @@ class TestPolarGridProvider:
         }
 
     def test_get_response_feature_extraction(self):
-        helper = PolarGridFeatureExtraction()
+        helper = PolarGridFeatureExtractionTask()
         response = {"data": [{"embedding": [0.1, 0.2, 0.3]}]}
         assert helper.get_response(response) == response
 
     def test_prepare_route_text_generation(self):
-        helper = PolarGridTextGeneration()
+        helper = PolarGridTextGenerationTask()
         assert helper._prepare_route("username/repo_name", "hf_token") == "/v1/completions"
 
     def test_prepare_payload_as_dict_text_generation(self):
-        helper = PolarGridTextGeneration()
+        helper = PolarGridTextGenerationTask()
         payload = helper._prepare_payload_as_dict(
             "Write a poem",
             {"max_new_tokens": 50},
@@ -1292,7 +1292,7 @@ class TestPolarGridProvider:
         }
 
     def test_get_response_text_generation(self):
-        helper = PolarGridTextGeneration()
+        helper = PolarGridTextGenerationTask()
         response = {"choices": [{"text": "Hello world"}]}
         assert helper.get_response(response) == "Hello world"
 
