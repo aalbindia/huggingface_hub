@@ -54,7 +54,7 @@ class PolarGridConversationalTask(BaseConversationalTask):
 
         return str(response)
 
-class PolarGridTextGeneration(BaseTextGenerationTask):
+class PolarGridTextGenerationTask(BaseTextGenerationTask):
     def __init__(self) -> None:
         super().__init__(provider=PROVIDER_NAME, base_url=PROVIDER_BASE_URL)
 
@@ -81,7 +81,7 @@ class PolarGridTextGeneration(BaseTextGenerationTask):
         return choices[0]["text"] if choices and "text" in choices[0] else str(response)
 
 
-class PolarGridFeatureExtraction(TaskProviderHelper):
+class PolarGridFeatureExtractionTask(TaskProviderHelper):
     def __init__(self) -> None:
         super().__init__(provider=PROVIDER_NAME, base_url=PROVIDER_BASE_URL, task="feature-extraction")
 
