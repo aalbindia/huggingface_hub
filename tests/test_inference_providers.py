@@ -1227,6 +1227,31 @@ class TestScalewayProvider:
 
 
 class TestPolarGridProvider:
+    def test_prepare_route_conversational(self):
+        helper = PolarGridConversationalTask()
+        url = helper._prepare_route("username/repo_name", "hf_token")
+        assert url == "/v1/chat/completions"
+
+    def test_prepare_payload_as_dict_conversational(self):
+        helper = PolarGridConversationalTask()
+        payload = helper._prepare_payload_as_dict(
+            "Hello there!",
+            {"max_new_tokens": 50, "temperature": 0.7, "top_p": 0.9},
+            mapped_model="polargrid-chat-model",
+        )
+        assert payload == {
+            "model": "polargrid-chat-model",
+            "messages": [{"role": "user", "content": "Hello there!"}],
+            "max_tokens": 50,
+            "temperature": 0.7,
+            "top_p": 0.9,
+        }
+    
+    def test_get_response_conversational(self):
+        helper = PolarGridConversationalTask()
+        response = {"choices": [{"message": {"role": "assistant", "content": "Hello back!"}}]}
+        assert helper.get_response(response) == "Hello back!"
+        
     def test_prepare_route_feature_extraction(self):
         helper = PolarGridFeatureExtraction()
         assert helper._prepare_route("username/repo_name", "hf_token") == "/v1/embeddings"
@@ -1251,35 +1276,26 @@ class TestPolarGridProvider:
 
     def test_prepare_route_text_generation(self):
         helper = PolarGridTextGeneration()
-        assert helper._prepare_route("username/repo_name", "hf_token") == "/v1/chat/completions"
+        assert helper._prepare_route("username/repo_name", "hf_token") == "/v1/completions"
 
     def test_prepare_payload_as_dict_text_generation(self):
         helper = PolarGridTextGeneration()
         payload = helper._prepare_payload_as_dict(
             "Write a poem",
-            {
-                "max_new_tokens": 50,
-                "temperature": 0.7,
-                "top_p": 0.9,
-                "stop_sequences": ["END"],
-                "custom_param": 123,
-            },
-            "polargrid-chat-model",
+            {"max_new_tokens": 50},
+            "polargrid-text-model",
         )
         assert payload == {
-            "model": "polargrid-chat-model",
-            "messages": [{"role": "user", "content": "Write a poem"}],
+            "model": "polargrid-text-model",
+            "prompt": "Write a poem",
             "max_tokens": 50,
-            "temperature": 0.7,
-            "top_p": 0.9,
-            "stop": ["END"],
-            "custom_param": 123,
         }
 
     def test_get_response_text_generation(self):
         helper = PolarGridTextGeneration()
-        response = {"choices": [{"message": {"content": "Hello world"}}]}
+        response = {"choices": [{"text": "Hello world"}]}
         assert helper.get_response(response) == "Hello world"
+
 
 class TestPublicAIProvider:
     def test_prepare_url(self):
